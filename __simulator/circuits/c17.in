@@ -1,0 +1,6 @@
+8 NAND2_0 nand I1 I3
+9 NAND2_1 nand I3 I4
+12 NAND2_2 nand I2 9
+15 NAND2_3 nand 9 I5
+16 NAND2_4 nand 8 12
+17 NAND2_5 nand 12 15

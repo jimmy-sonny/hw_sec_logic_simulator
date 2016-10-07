@@ -1,0 +1,64 @@
+1234:Verilog sonny$ for i in `ls .`; do ../grinder.sh $i; done
+
+il numero di inputs ed output è sbagliato di -1 (deve essere corretto di +1)
+
+OUTPUT_FILE: c1355.in
+inputs_number: 41
+outputs_number: 32
+signals_number: 514
+
+OUTPUT_FILE: c17.in
+inputs_number: 5
+outputs_number: 2
+signals_number: 4
+
+OUTPUT_FILE: c1908.in
+inputs_number: 33
+outputs_number: 25
+signals_number: 839
+
+OUTPUT_FILE: c2670.in
+inputs_number: 157
+outputs_number: 64
+signals_number: 1129
+
+OUTPUT_FILE: c3540.in
+inputs_number: 50
+outputs_number: 22
+signals_number: 1629
+
+OUTPUT_FILE: c432.in
+inputs_number: 36
+outputs_number: 7
+signals_number: 135
+
+OUTPUT_FILE: c499.in
+inputs_number: 41
+outputs_number: 32
+signals_number: 170
+
+OUTPUT_FILE: c5315.in
+inputs_number: 178
+outputs_number: 123
+signals_number: 2184
+
+OUTPUT_FILE: c6288.in
+inputs_number: 32
+outputs_number: 32
+signals_number: 2384
+
+OUTPUT_FILE: c880.in
+inputs_number: 60
+outputs_number: 26
+signals_number: 357
+
+
+
+OUTPUT_FILE: C2670.in
+inputs_number: 233
+outputs_number: 140
+./grinder.sh: line 53: 1789
+1907-1: syntax error in expression (error token is "1907-1")
+signals_number: -140
+
+
