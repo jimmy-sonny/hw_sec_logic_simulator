@@ -4,13 +4,13 @@
 ##########################################
 #  Note:
 #
-#  USAGE:: python3 evaluator input_ugp output_ugp circuit all_combinations [max_combinations]
-#  USAGE::example: python3 evaluator.py input_ugp.txt output_ugp.txt circuits/c17.in True
-#
 #  New logic ports are added at the end of the gate list, with a high id (>8000).
 #  New inputs (keys) are added at the end of input list, with high id (>7000).
-# 
-
+#
+#  Useful commands:
+#  ./__utility/utils_0_1.sh 41 100 > circuits/prefix_c499_100.txt
+#  python3 evaluator.py ./circuits/input_ugp_c499.txt output_ugp.txt ./circuits/c499.in ./circuits/prefix_c499_100.txt True 100
+#
 
 import sys
 import time
@@ -21,7 +21,7 @@ from gate import Gate # Logic gate simulation
 from circuit import Circuit # Combinational logic simulation
 
 def get_new_gate_length(ugp_input, circuit_length):
-    new_gate_length = min(sum(np.clip(np.array(list(map(int, ugp_input))), 0, 1)), int(circuit_length/2))
+    new_gate_length = sum(np.clip(np.array(list(map(int, ugp_input))), 0, 1))
     return new_gate_length
 
 def get_number_rare_signals(probabilities):
@@ -109,7 +109,6 @@ def recursive(circuit, prefix_array, step, input_combination_array, length_of_co
             ## Evaluate the circuit
             combination_array = prefix_array[:]
             combination_array.extend(input_combination_array)
-            #print(combination_array)
             output_evaluation = evaluate_circuit(combination_array, circuit)
             hd = get_hamming(output_evaluation, base_evaluation, base_circuit_outputs, circuit)
             # print("DEBUG:: hamming_distance: {0}".format(hd) + "\n")
@@ -135,131 +134,137 @@ def main():
     ## Parse command line arguments
     if len(sys.argv) < 5:
         print("ERROR:: number of arguments is incorrect")
-        print("USAGE:: python3 evaluator input_ugp output_ugp circuit all_combinations [max_combinations]")
-        print("USAGE::example: python3 evaluator.py input_ugp.txt output_ugp.txt circuits/c17.in True\n\n")
+        print("USAGE:: python3 evaluator input_ugp output_ugp circuit prefix_combination all_combinations [max_combinations]")
+        print("USAGE::example: python3 evaluator.py input_ugp.txt output_ugp.txt circuits/c17.in c17_comb.txt True\n\n")
         sys.exit()
 
     file_ugp_input = sys.argv[1]
     file_ugp_output = sys.argv[2]
     file_circuit = sys.argv[3]
+    file_prefix_combination = sys.argv[4]
 
-    if sys.argv[4].lower() == 'true':
+    if sys.argv[5].lower() == 'true':
         all_combinations = True
     else:
         all_combinations = False
 
     ## At most evaluate 1 million of combinations
     max_combinations = 1000000
-    if len(sys.argv) >= 6:
-        max_combinations = int(sys.argv[5])
+    if len(sys.argv) >= 7:
+        max_combinations = int(sys.argv[6])
 
     if all_combinations == False:
         if len(sys.argv) != 6:
             print("ERROR:: number of arguments is incorrect")
-            print("USAGE:: python3 evaluator input_ugp output_ugp circuit all_combinations [max_combinations]")
-            print("USAGE::example: python3 evaluator.py input_ugp.txt output_ugp.txt circuits/c17.in False 100\n\n")
+            print("USAGE:: python3 evaluator input_ugp output_ugp circuit prefix_combination all_combinations [max_combinations]")
+            print("USAGE::example: python3 evaluator.py input_ugp.txt output_ugp.txt circuits/c17.in c17_comb.txt False 100\n\n")
             sys.exit()
 
-    # print("DEBUG:: input_ugp:{0} output_ugp:{1} circuit{2}".format(file_ugp_input, file_ugp_output, file_circuit))
+    # print("DEBUG:: input_ugp:{0} output_ugp:{1} circuit{2} file_prefix_combination:{3}".format(file_ugp_input, file_ugp_output, file_circuit, file_prefix_combination))
     # print("DEBUG:: all_combinations:{0}".format(all_combinations))
     # print("DEBUG:: max_combinations:{0}".format(max_combinations))
 
     ## Check if the file exists
-    if os.path.isfile(file_ugp_input) and os.path.isfile(file_circuit):
+    if os.path.isfile(file_ugp_input) and os.path.isfile(file_circuit) and os.path.isfile(file_prefix_combination):
 
         ## Read the circuit configuration from the input file
-        with open(file_ugp_input, "r") as f_in:
+        with open(file_prefix_combination, "r") as prefix_in:
 
-            ## Create the BASE Circuit
-            base_circuit = Circuit(file_circuit)
-            # base_circuit.print_gates()
-            # print()
-            # print("TIME STEP1")
+            ## Read the circuit configuration from the input file
+            with open(file_ugp_input, "r") as f_in:
 
-            ## Get circuit inputs and outputs
-            base_circuit_input_length = get_circuit_input_length(base_circuit)
-            base_circuit_gate_lenght = get_circuit_gate_length(base_circuit)
-            base_circuit_outputs = get_cricuit_output(base_circuit)
-            # print("TIME STEP2")
+                ## Create the BASE Circuit
+                base_circuit = Circuit(file_circuit)
+                # print("TIME STEP1")
 
-            ## Create a random combination and evaluate the BASE circuit:
-            prefix_array = [random.randint(0,1) for i in range(base_circuit_input_length)]
-            base_circuit_evaluation = evaluate_circuit(prefix_array, base_circuit)
-            # print("TIME STEP3")
+                ## Get circuit inputs and outputs
+                base_circuit_input_length = get_circuit_input_length(base_circuit)
+                base_circuit_gate_lenght = get_circuit_gate_length(base_circuit)
+                base_circuit_outputs = get_cricuit_output(base_circuit)
 
-            ## GET altering string
-            ugp_input = f_in.readline().split();
+                ## GET altering string
+                ugp_input = f_in.readline().split();
 
-            ## Check correctness
-            if check_correctness_alteratioin(ugp_input, base_circuit_gate_lenght) == False:
-                print("ERROR:: uGP Input is not correct")
-                sys.exit()
-            # print("TIME STEP4")
+                ## Check correctness
+                if check_correctness_alteratioin(ugp_input, base_circuit_gate_lenght) == False:
+                    print("ERROR:: uGP Input is not correct")
+                    sys.exit()
 
-            ## CREATE A NEW CIRCUIT.. THIS WILL BE MODIFIED
-            new_circuit = Circuit(file_circuit)
-            number_new_gates = alter_circuit(ugp_input, new_circuit)
-            # new_circuit.print_gates()
-            # print()
-            # print("TIME STEP5")
+                ## CREATE A NEW CIRCUIT.. THIS WILL BE MODIFIED
+                new_circuit = Circuit(file_circuit)
+                number_new_gates = alter_circuit(ugp_input, new_circuit)
 
-            # Evaluate Hamming Distance
-            recursive(new_circuit, prefix_array, 0, input_combination_array, number_new_gates, all_combinations, max_combinations, base_circuit_evaluation, base_circuit_outputs)
-            # print("\nDEBUG:: generated {0} combinations of bits\n".format(combination_counter))
-            hamming_distances = [i/len(base_circuit_outputs) for i in hamming_distances]
-            exp_mean_new_hd = get_exp_mean(hamming_distances)
-            mean_new_hd = get_mean(hamming_distances)
-            # print("TIME STEP6")
+                ## Evaluate the hamming distance
+                exp_mean_hds_array = []
+                mean_hds_array = []
 
-            ## Evaluate the signal prob on BASE CIRCUIT
-            base_probs = evaluate_signal_probabilities(base_circuit)
-            number_rare_signals = get_number_rare_signals(base_probs)
-            exp_mean_base_probs = get_exp_mean(base_probs)
-            # print("TIME STEP7")
+                for prefix in prefix_in.readlines():
+                    prefix_array = prefix.split()
 
-            ## Evaluate the signal probabilities of NEW CIRCUIT
-            new_probs = evaluate_signal_probabilities(new_circuit)
-            print("TODO:: I am considering all the signals (new ones included!)")
-            # new_probs_cutted = new_probs[:-number_new_gates]
-            new_probs_cutted = new_probs[:]
-            exp_mean_new_probs_cutted = get_exp_mean(new_probs_cutted)
-            number_new_rare_signals = get_number_rare_signals(new_probs_cutted)
-            mean_new_probs_cutted = get_mean(new_probs_cutted)
-            # print("TIME STEP8")
+                    if len(prefix_array) != base_circuit_input_length:
+                        print("ERROR:: length is: " + str(len(prefix_array)) + " but should be " + str(base_circuit_input_length))
+                        sys.exit()
 
-            ## New gates evaluation
-            new_gate_length = get_new_gate_length(ugp_input, base_circuit_input_length)
+                    base_circuit_evaluation = evaluate_circuit(prefix_array, base_circuit)
+                    recursive(new_circuit, prefix_array, 0, input_combination_array, number_new_gates, all_combinations, max_combinations, base_circuit_evaluation, base_circuit_outputs)
 
-            ## CALCULATE FITNESS
-            first_fitness = get_safe_reverse(new_gate_length)
-            second_fitness = get_safe_reverse(exp_mean_new_hd)
-            third_fitness = get_safe_reverse(exp_mean_new_probs_cutted)
+                    hamming_distances = [i/len(base_circuit_outputs) for i in hamming_distances]
+                    exp_mean_hd = get_exp_mean(hamming_distances)
+                    exp_mean_hds_array.append(exp_mean_hd)
 
-            ## SOME STATS
-            # print("INFO:: first_fitness: " + str(first_fitness) + "\n")
+                    mean_hd = get_mean(hamming_distances)
+                    mean_hds_array.append(mean_hd)
+                    hamming_distances.clear()
+                    input_combination_array.clear()
 
-            # print("DEBUG:: hamming_distances: " + str(hamming_distances))
-            # print("INFO:: exponential mean: " + str(exp_mean_new_hd)+ "\n")
+                exp_mean_hds = get_exp_mean(exp_mean_hds_array)
+                mean_hds = get_mean(mean_hds_array)
 
-            # print("INFO:: second_fitness: " + str(second_fitness) + "\n")
+                ## Evaluate the signal prob on BASE CIRCUIT
+                base_probs = evaluate_signal_probabilities(base_circuit)
+                number_rare_signals = get_number_rare_signals(base_probs)
+                exp_mean_base_probs = get_exp_mean(base_probs)
 
-            # print("DEBUG:: base output probabilities: " + str(base_probs))
-            # print("DEBUG:: new output probabilities: " + str(new_probs_cutted))
-            # print("DEBUG:: base exponential mean: " + str(exp_mean_base_probs))
-            # print("DEBUG:: new exponential mean probabilites: " + str(exp_mean_new_probs_cutted)+ "\n")
+                ## Evaluate the signal probabilities of NEW CIRCUIT
+                new_probs = evaluate_signal_probabilities(new_circuit)
+                print("TODO:: I am considering all the signals (new ones included!)")
+                # new_probs_cutted = new_probs[:-number_new_gates]
+                new_probs_cutted = new_probs[:]
+                exp_mean_new_probs_cutted = get_exp_mean(new_probs_cutted)
+                number_new_rare_signals = get_number_rare_signals(new_probs_cutted)
+                mean_new_probs_cutted = get_mean(new_probs_cutted)
 
-            # print("INFO:: third_fitness: " + str(third_fitness) + "\n")
+                ## New gates evaluation
+                new_gate_length = get_new_gate_length(ugp_input, base_circuit_input_length)
 
-            print(str(new_gate_length) + " AVG_HD:" + str(mean_new_hd) + " AVG_SIG:" + str(mean_new_probs_cutted) + " N_RS:" + str(number_rare_signals) + " NN_RS:" + str(number_new_rare_signals))
-            print(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness))
+                ## CALCULATE FITNESS
+                first_fitness = get_safe_reverse(exp_mean_hds)
+                second_fitness = get_safe_reverse(exp_mean_new_probs_cutted)
+                third_fitness = get_safe_reverse(new_gate_length)
 
-            ## Write the fitness to the output file
-            with open(file_ugp_output, "w") as f_out:
-                f_out.write(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness) + "\n");
+                ## SOME STATS
+                # print("INFO:: HD mean: " + str(mean_hds)+ "\n")
+                # print("INFO:: HD exponential mean: " + str(exp_mean_hds)+ "\n")
+
+                # print("DEBUG:: Signals base probabilities: " + str(base_probs))
+                # print("DEBUG:: Signals new probabilities: " + str(new_probs_cutted))
+                # print("DEBUG:: Signals base exp mean: " + str(exp_mean_base_probs))
+                # print("DEBUG:: Signals new exp mean prob: " + str(exp_mean_new_probs_cutted)+ "\n")
+
+                # print("INFO:: first_fitness: " + str(first_fitness) + "\n")
+                # print("INFO:: second_fitness: " + str(second_fitness) + "\n")
+                # print("INFO:: third_fitness: " + str(third_fitness) + "\n")
+
+                print("AVG_HD:" + str(mean_hds) + " AVG_SIG:" + str(mean_new_probs_cutted) + " N_RS:" + str(number_rare_signals) + " NN_RS:" + str(number_new_rare_signals) + " " + str(new_gate_length))
+                print(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness))
+
+                ## Write the fitness to the output file
+                with open(file_ugp_output, "w") as f_out:
+                    f_out.write(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness) + "\n");
 
     # Otherwise, display an error.
     else:
-        print("ERROR:: Cannot find file at path \"" + file_ugp_input + "\"")
+        print("ERROR:: Cannot find file at the specified path")
         sys.exit()
 
 ## Call main function
