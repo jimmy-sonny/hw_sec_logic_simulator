@@ -254,9 +254,9 @@ class Circuit(object):
                     inputs = []
                     for input in self.__gates[i].input:
                         if input.startswith("I"):
-                            inputs.append(combination[self.inputs_dicts[self.__get_int_of_general_value(input)]])
+                            inputs.append(int(combination[self.inputs_dicts[self.__get_int_of_general_value(input)]]))
                         else:
-                            inputs.append(gate_values[self.gates_dicts[int(input)]])
+                            inputs.append(int(gate_values[self.gates_dicts[int(input)]]))
 
                     # Assign the gate value to the current index of the list of block values.
                     gate_values[self.gates_dicts[self.__gates[i].id]] = self.__gates[i].logic_output(inputs)
@@ -277,7 +277,6 @@ class Circuit(object):
             num_input_values = self.__get_num_of_general_input_values()
 
             input_probabilities = ['0.5'] * num_input_values
-            # print ("DEBUG:: input_probabilities " + str(input_probabilities))
 
             gate_probabilities = self.__calculate_output_probabilities(input_probabilities)
             return gate_probabilities
@@ -307,11 +306,9 @@ class Circuit(object):
                     inputs = []
                     for input in self.__gates[i].input:
                         if input.startswith("I"):
-                            inputs.append(input_probabilities[self.inputs_dicts[self.__get_int_of_general_value(input)]])
+                            inputs.append(float(input_probabilities[self.inputs_dicts[self.__get_int_of_general_value(input)]]))
                         else:
-                            inputs.append(gate_values[self.gates_dicts[int(input)]])
-
-                        # print("DEBUG:: GATE: {0} inputs: {1}".format(self.__gates[i].name, str(inputs)))
+                            inputs.append(float(gate_values[self.gates_dicts[int(input)]]))
 
                     # Assign the gate value to the current index of the list of block values.
                     gate_values[self.gates_dicts[self.__gates[i].id]] = self.__gates[i].output_probability(inputs)
