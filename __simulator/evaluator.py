@@ -9,7 +9,7 @@
 #
 #  Useful commands:
 #  ./__utility/utils_0_1.sh 41 100 > circuits/prefix_c499_100.txt
-#  python3 evaluator.py ./circuits/input_ugp_c499.txt output_ugp.txt ./circuits/c499.in ./circuits/prefix_c499_100.txt True 100
+#  python3 evaluator.py ./circuits/input_ugp_c499.txt output_ugp.txt ./circuits/c499.in ./circuits/prefix_c499_10.txt False 10
 #  python3 evaluator.py ./circuits/input_ugp_c17.txt output_ugp.txt ./circuits/c17.in ./circuits/prefix_c17.txt True
 #  python3 evaluator.py ./circuits/input_ugp_c2670.txt output_ugp.txt ./circuits/c2670.in ./circuits/prefix_c2670_10.txt False 1
 
