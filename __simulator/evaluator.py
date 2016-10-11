@@ -175,7 +175,6 @@ def main():
 
                 ## Create the BASE Circuit
                 base_circuit = Circuit(file_circuit)
-                # print("TIME STEP1")
 
                 ## Get circuit inputs and outputs
                 base_circuit_input_length = get_circuit_input_length(base_circuit)
@@ -205,8 +204,14 @@ def main():
                         print("ERROR:: length is: " + str(len(prefix_array)) + " but should be " + str(base_circuit_input_length))
                         sys.exit()
 
+                    # s = time.time()
                     base_circuit_evaluation = evaluate_circuit(prefix_array, base_circuit)
+                    # print(time.time() -s)
+
+                    # s = time.time()
                     recursive(new_circuit, prefix_array, 0, input_combination_array, number_new_gates, all_combinations, max_combinations, base_circuit_evaluation, base_circuit_outputs)
+                    # print(time.time() -s)
+                    # print()
 
                     hamming_distances = [i/len(base_circuit_outputs) for i in hamming_distances]
                     exp_mean_hd = get_exp_mean(hamming_distances)
@@ -273,6 +278,6 @@ input_combination_array = []
 hamming_distances = []
 combination_counter = 0
 
-starttime = time.time()
+# starttime = time.time()
 main();
-print("TIME REQ : " +str(time.time() - starttime))
+# print("TIME REQ : " +str(time.time() - starttime))

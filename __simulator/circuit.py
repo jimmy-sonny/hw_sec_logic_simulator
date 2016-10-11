@@ -1,6 +1,7 @@
 ## Author Andrea Marcelli
 ## Copyright to Byron Phung
 
+import time
 from itertools import *
 from gate import Gate   # Logic gate simulation
 from system import *
@@ -70,29 +71,30 @@ class Circuit(object):
 
                 if int(array[i]) == 1:
                     # print("DEBUG:: adding port type 1")
-                    # Aggiungo il nuovo gate
-                    self.__gates.append(Gate(gate_number, "type1_"+str(gate_number), "xor", new_gate_inputs))
+                    # Aggiungo il nuovo gate : # id, name, type, input, score, sorting
+                    self.__gates.append(Gate(gate_number, "type1_"+str(gate_number), "xor", new_gate_inputs, 1, self.__gates[i].id+1))
                     counter_insertion+=1
 
                 if int(array[i]) == 2:
                     # print("DEBUG:: adding port type 2")
-                    # Aggiungo il nuovo gate
-                    self.__gates.append(Gate(gate_number, "type2_"+str(gate_number), "xnor", new_gate_inputs))
+                    # Aggiungo il nuovo gate : # id, name, type, input, score, sorting
+                    self.__gates.append(Gate(gate_number, "type2_"+str(gate_number), "xnor", new_gate_inputs, 1, self.__gates[i].id+1))
                     counter_insertion+=1
 
                 self.gates_dicts[gate_number] = self.gates_dicts_counter
                 self.gates_dicts_counter = self.gates_dicts_counter +1
 
-        # print("DEBUG:: input map: " + str(self.inputs_dicts))
-        # print("DEBUG:: gate map: " + str(self.gates_dicts) + "\n")
-
+        self.__gates.sort(key = lambda x: x.sorting)
         return counter_insertion
+
 
     def get_real_index(self, index):
         return self.gates_dicts[index]
 
+
     def get_circuit_gate_length(self):
         return len(self.__gates)
+
 
     def get_cricuit_output(self):
         ids = set(self.gates_dicts.keys())
@@ -112,10 +114,10 @@ class Circuit(object):
         file -- Circuit file to read
         """
         self.__get_gates_from_file(file)
-        self.__sort_gates_by_id(0, len(self.__gates) - 1)
-
+        self.__gates.sort(key = lambda x: x.id)
         # print("DEBUG:: circuit input map: " + str(self.inputs_dicts))
         # print("DEBUG:: circuit gate map: " + str(self.gates_dicts) + "\n")
+
 
     def __get_gates_from_file(self, file):
         """Get all the gates from the circuit file and store it in the circuit.
@@ -159,11 +161,10 @@ class Circuit(object):
             # Merge the gate inputs into the data fields list.
             data_fields.append(gate_inputs)
 
-            # Create a new Gate object and store it.
-            # id, name, type, input
-
+            score = 2
             for gate_input in gate_inputs:
                 if gate_input.startswith("I"):
+                    score -= 1
                     gate_input_row = self.__get_int_of_general_value(gate_input)
                     if gate_input_row not in self.inputs_dicts:
                         self.inputs_dicts[gate_input_row] = self.inputs_dicts_counter
@@ -171,73 +172,12 @@ class Circuit(object):
             self.gates_dicts[data_fields[0]] = self.gates_dicts_counter
             self.gates_dicts_counter = self.gates_dicts_counter +1
 
-            self.__gates.append(Gate(data_fields[0], data_fields[1], data_fields[2], data_fields[3]))
+            # Add the score to the data_fields
+            data_fields.append(score)
 
-    def __sort_gates_by_id(self, left, right):
-        """Sort the stored gates by ID using quick sort algorithm.
-
-        Keyword arguments:
-        <None>
-        """
-        # Base Condition: If all left and right indexes have finished parsing,
-        #                 then do nothing.
-        if left == right:
-            pass
-
-        # Base Condition: If there are only 2 elements being compared, then
-        #                 simply check the order.
-        elif left == right - 1:
-            # If the gate's ID at left index is greater than that of the right,
-            # then swap the 2 gates.
-            if self.__gates[left].id > self.__gates[right].id:
-                temp = self.__gates[left]
-                self.__gates[left] = self.__gates[right]
-                self.__gates[right] = temp
-
-        # Recursive Condition: Continue sorting the data.
-        else:
-            # Sum the ID values starting from the left index to the right
-            # index.
-            sum = 0
-            for i in range(left, right + 1):
-                sum = sum + self.__gates[i].id
-
-            # Calculate the average of the ID sum.
-            average = sum / (right - left + 1)
-
-            # Track the left and right pointers.
-            left_pointer = left
-            right_pointer = right
-
-            # Divide the list into 2 sub-lists (if applicable) while the left
-            # pointer is less than the right pointer.
-            while left_pointer < right_pointer:
-                # While the left pointer is less than the average, keep
-                # incrementing the left pointer.
-                while self.__gates[left_pointer].id < average:
-                    left_pointer = left_pointer + 1
-
-                # While the right pointer is greater than or equal to the
-                # average, keep incrementing the right pointer.
-                while self.__gates[right_pointer].id >= average:
-                    right_pointer = right_pointer - 1
-
-                # If the left pointer is less than the right pointer, then swap
-                # the gates at the left and right pointers.
-                if left_pointer < right_pointer:
-                    temp = self.__gates[left_pointer]
-                    self.__gates[left_pointer] = self.__gates[right_pointer]
-                    self.__gates[right_pointer] = temp
-
-            # If the left index is less than the right pointer, then sort the
-            # lower half sub-list.
-            if left < right_pointer:
-                self.__sort_gates_by_id(left, right_pointer)
-
-            # If the right pointer is less than the left pointer, then sort the
-            # upper half sub-list.
-            if right_pointer < left_pointer:
-                self.__sort_gates_by_id(left_pointer, right)
+            # Create a new Gate object and store it.
+            # id, name, type, input, score, sorting
+            self.__gates.append(Gate(data_fields[0], data_fields[1], data_fields[2], data_fields[3], data_fields[4], data_fields[0]))
 
     def print_gates(self):
         """Print the gates in the current circuit sorted by ID.
@@ -259,23 +199,6 @@ class Circuit(object):
             for input in gate.input:
                 print(input.ljust(2) + "  ", end="")
             print()
-
-    def get_output_probabilities(self):
-        """Print the probabilities of the selected outputs (if applicable).
-
-        If no outputs are selected, then all gate probabilities will be printed.
-
-        Keyword arguments:
-        selected_outputs -- List of selected outputs
-        """
-        # Get the number of input values.
-        num_input_values = self.__get_num_of_general_input_values()
-
-        input_probabilities = ['0.5'] * num_input_values
-        # print ("DEBUG:: input_probabilities " + str(input_probabilities))
-
-        gate_probabilities = self.__calculate_output_probabilities(input_probabilities)
-        return gate_probabilities
 
 
     def get_output_for_combination(self, selected_outputs, combination):
@@ -305,6 +228,7 @@ class Circuit(object):
         gate_values = self.__calculate_outputs_for_combinations(combination)
         return gate_values
 
+
     def __calculate_outputs_for_combinations(self, combination):
         """Calculate the outputs for the current bit combination.
 
@@ -317,15 +241,15 @@ class Circuit(object):
         # While all the gate values are not found, determine the gate values.
         while not self.__are_all_gate_values_found(gate_values):
             # Parse each gate value.
-            for i in range(len(gate_values)):
-                # If the gate value has already been determined, then skip
-                # the current iteration.
-                if gate_values[i] != '':
+            for i in range(len(self.__gates)):
+
+                # If the gate value has already been determined, then skip the current iteration.
+                if gate_values[self.gates_dicts[self.__gates[i].id]] != '':
                     continue
 
-                # If all the required inputs for the current gate are
-                # available, then calculate the gate value.
+                # If all the required inputs for the current gate are available, then calculate the gate value.
                 if self.__are_all_required_inputs_available(self.__gates[i], gate_values):
+
                     # Get the int input values for the current gate.
                     inputs = []
                     for input in self.__gates[i].input:
@@ -334,12 +258,30 @@ class Circuit(object):
                         else:
                             inputs.append(gate_values[self.gates_dicts[int(input)]])
 
-                    # Assign the gate value to the current index of the
-                    # list of block values.
-                    gate_values[i] = self.__gates[i].logic_output(inputs)
+                    # Assign the gate value to the current index of the list of block values.
+                    gate_values[self.gates_dicts[self.__gates[i].id]] = self.__gates[i].logic_output(inputs)
 
-        # Return the calculated gate values.
+        # Return the combinatorial output for the circuit
         return gate_values
+
+
+    def get_output_probabilities(self):
+            """Print the probabilities of the selected outputs (if applicable).
+
+            If no outputs are selected, then all gate probabilities will be printed.
+
+            Keyword arguments:
+            selected_outputs -- List of selected outputs
+            """
+            # Get the number of input values.
+            num_input_values = self.__get_num_of_general_input_values()
+
+            input_probabilities = ['0.5'] * num_input_values
+            # print ("DEBUG:: input_probabilities " + str(input_probabilities))
+
+            gate_probabilities = self.__calculate_output_probabilities(input_probabilities)
+            return gate_probabilities
+
 
     def __calculate_output_probabilities(self, input_probabilities):
         """Calculate the outputs probabilities for each gate.
@@ -352,10 +294,10 @@ class Circuit(object):
 
         # While all the gate values are not found, determine the gate values.
         while not self.__are_all_gate_values_found(gate_values):
-            for i in range(len(gate_values)):
+            for i in range(len(self.__gates)):
 
-                # If the gate value has already been determined,skip it
-                if gate_values[i] != '':
+                # If the gate value has already been determined, then skip the current iteration.
+                if gate_values[self.gates_dicts[self.__gates[i].id]] != '':
                     continue
 
                 # Check if the required inputs for the current gate are available
@@ -371,8 +313,8 @@ class Circuit(object):
 
                         # print("DEBUG:: GATE: {0} inputs: {1}".format(self.__gates[i].name, str(inputs)))
 
-                    gate_values[i] = self.__gates[i].output_probability(inputs)
-                    # print ("GATE: {0} probability: {1}".format(self.__gates[i].name, gate_values[i]))
+                    # Assign the gate value to the current index of the list of block values.
+                    gate_values[self.gates_dicts[self.__gates[i].id]] = self.__gates[i].output_probability(inputs)
 
         # Return the calculated gate values.
         return gate_values

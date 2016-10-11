@@ -12,11 +12,13 @@ class Gate(object):
     type  -- Logic gate type
     input -- List of input names
     """
-    def __init__(self, id, name, type, input):
+    def __init__(self, id, name, type, input, score, sorting):
         self.id = id
         self.name = name.upper()
         self.type = type.upper()
         self.input = input
+        self.score = score
+        self.sorting = sorting
 
     def logic_output(self, input):
         """Evaluate the output of the current gate based on its type.
