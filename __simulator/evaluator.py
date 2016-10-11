@@ -175,7 +175,7 @@ def main():
         max_combinations = int(sys.argv[6])
 
     if all_combinations == False:
-        if len(sys.argv) != 7:
+        if len(sys.argv) < 7:
             print("ERROR:: number of arguments is incorrect")
             print("USAGE:: python3 evaluator input_ugp output_ugp circuit prefix_combination all_combinations [max_combinations]")
             print("USAGE::example: python3 evaluator.py input_ugp.txt output_ugp.txt circuits/c17.in c17_comb.txt False 100\n\n")
@@ -232,15 +232,15 @@ def main():
                     if all_combinations == True:
                         recursive(new_circuit, prefix_array, 0, input_combination_array, number_new_gates, all_combinations, base_circuit_evaluation, base_circuit_outputs)
                     else:
-                        s = time.time()
+                        # s = time.time()
                         for i in range(max_combinations):
                             combination_array = prefix_array[:]
                             combination_array.extend([random.randint(0,1) for i in range(number_new_gates)])
                             new_evaluation = evaluate_circuit(combination_array, new_circuit)
                             hd = get_hamming(new_evaluation, base_circuit_evaluation, base_circuit_outputs, new_circuit)
                             hamming_distances.append(hd)
-                        print(time.time() -s)
-                        print()
+                        # print(time.time() -s)
+                        # print()
 
                     hamming_distances = [i/len(base_circuit_outputs) for i in hamming_distances]
                     exp_mean_hd = get_exp_mean(hamming_distances)
