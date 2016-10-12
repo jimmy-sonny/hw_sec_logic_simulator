@@ -225,22 +225,22 @@ def main():
                         print("ERROR:: length is: " + str(len(prefix_array)) + " but should be " + str(base_circuit_input_length))
                         sys.exit()
 
-                    s = time.time()
+                    # s = time.time()
                     base_circuit_evaluation = evaluate_circuit(prefix_array, base_circuit)
-                    print(time.time() -s)
+                    # print(time.time() -s)
 
                     if all_combinations == True:
                         recursive(new_circuit, prefix_array, 0, input_combination_array, number_new_gates, all_combinations, base_circuit_evaluation, base_circuit_outputs)
                     else:
-                        s = time.time()
+                        # s = time.time()
                         for i in range(max_combinations):
                             combination_array = prefix_array[:]
                             combination_array.extend([random.randint(0,1) for i in range(number_new_gates)])
                             new_evaluation = evaluate_circuit(combination_array, new_circuit)
                             hd = get_hamming(new_evaluation, base_circuit_evaluation, base_circuit_outputs, new_circuit)
                             hamming_distances.append(hd)
-                        print(time.time() -s)
-                        print()
+                        # print(time.time() -s)
+                        # print()
 
                     hamming_distances = [i/len(base_circuit_outputs) for i in hamming_distances]
                     exp_mean_hd = get_exp_mean(hamming_distances)
