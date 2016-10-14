@@ -32,10 +32,12 @@ __circuits_and_parsers: contains the circuits and the utility script for the for
 —-To run the experiments:—-
 
 1) Go in the __upg_files folder and select the circuit you want to test
-2) Run: ugp3 > saved_output.txt
+2) Run: ugp3 > output_ugp3.txt
 3) Run the finalizer script (from __utility folder) to get the plots [Note: plotter.py must be in the same folder of finaliser.sh]
 ./finalizer.sh output_ugp3.txt
-
+3.2) python3 plotter2.py output_evaluator_fitness.txt plot1.png plot2.png
+3.3) python3 plotter3.py output_evaluator_readable.txt plot3.png plot4.png plot5.png
+4) mkdir PF; mv PF* ./PF; tar -zcvf PF.tar.gz PF
 
 
 —-If you simply want to run the evaluator:—-
@@ -43,13 +45,13 @@ __circuits_and_parsers: contains the circuits and the utility script for the for
 1) Go in the __simulator folder
 2) run one of the following commands (or meaningful variations):
 
-python3 evaluator.py ./circuits/input_ugp_c17.txt output_ugp.txt ./circuits/c17.in ./circuits/prefix_c17.txt True
-python3 evaluator.py ./circuits/input_ugp_c499.txt output_ugp.txt ./circuits/c499.in ./circuits/prefix_c499.txt False 10
-python3 evaluator.py ./circuits/input_ugp_c880.txt output_ugp.txt ./circuits/c880.in ./circuits/prefix_c880.txt False 10
-python3 evaluator.py ./circuits/input_ugp_c1355.txt output_ugp.txt ./circuits/c1355.in ./circuits/prefix_c1355.txt False 10
-python3 evaluator.py ./circuits/input_ugp_c2670.txt output_ugp.txt ./circuits/c2670.in ./circuits/prefix_c2670.txt False 1
-python3 evaluator.py ./circuits/input_ugp_c5315.txt output_ugp.txt ./circuits/c5315.in ./circuits/prefix_c5315.txt False 1
-python3 evaluator.py ./circuits/input_ugp_c6288.txt output_ugp.txt ./circuits/c6288.in ./circuits/prefix_c6288.txt False 1
+python3 evaluator.py ./circuits/input_ugp_c17.txt output_ugp.txt ./circuits/c17.in ./circuits/prefix_c17.txt True output_readable.txt output_fitness.txt
+python3 evaluator.py ./circuits/input_ugp_c499.txt output_ugp.txt ./circuits/c499.in ./circuits/prefix_c499.txt False 10 output_readable.txt output_fitness.txt
+python3 evaluator.py ./circuits/input_ugp_c880.txt output_ugp.txt ./circuits/c880.in ./circuits/prefix_c880.txt False 10 output_readable.txt output_fitness.txt
+python3 evaluator.py ./circuits/input_ugp_c1355.txt output_ugp.txt ./circuits/c1355.in ./circuits/prefix_c1355.txt False 10 output_readable.txt output_fitness.txt
+python3 evaluator.py ./circuits/input_ugp_c2670.txt output_ugp.txt ./circuits/c2670.in ./circuits/prefix_c2670.txt False 1 output_readable.txt output_fitness.txt
+python3 evaluator.py ./circuits/input_ugp_c5315.txt output_ugp.txt ./circuits/c5315.in ./circuits/prefix_c5315.txt False 1 output_readable.txt output_fitness.txt
+python3 evaluator.py ./circuits/input_ugp_c6288.txt output_ugp.txt ./circuits/c6288.in ./circuits/prefix_c6288.txt False 1 output_readable.txt output_fitness.txt
 
 Note:
 The file passed as third parameters contains all the input combinations that will be tested on the circuit.

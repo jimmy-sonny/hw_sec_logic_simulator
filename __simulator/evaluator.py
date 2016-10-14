@@ -9,9 +9,9 @@
 #
 #  Useful commands:
 #  ./__utility/utils_0_1.sh 41 100 > circuits/prefix_c499_100.txt
-#  python3 evaluator.py ./circuits/input_ugp_c499.txt output_ugp.txt ./circuits/c499.in ./circuits/prefix_c499_10.txt False 10
-#  python3 evaluator.py ./circuits/input_ugp_c17.txt output_ugp.txt ./circuits/c17.in ./circuits/prefix_c17.txt True
-#  python3 evaluator.py ./circuits/input_ugp_c2670.txt output_ugp.txt ./circuits/c2670.in ./circuits/prefix_c2670_10.txt False 1
+#  python3 evaluator.py ./circuits/input_ugp_c499.txt output_ugp.txt ./circuits/c499.in ./circuits/prefix_c499_10.txt False 10 output_readable.txt output_fitness.txt
+#  python3 evaluator.py ./circuits/input_ugp_c17.txt output_ugp.txt ./circuits/c17.in ./circuits/prefix_c17.txt True output_readable.txt output_fitness.txt
+#  python3 evaluator.py ./circuits/input_ugp_c2670.txt output_ugp.txt ./circuits/c2670.in ./circuits/prefix_c2670_10.txt False 1 output_readable.txt output_fitness.txt
 
 import sys
 import time
@@ -155,14 +155,17 @@ def main():
     ## Parse command line arguments
     if len(sys.argv) < 5:
         print("ERROR:: number of arguments is incorrect")
-        print("USAGE:: python3 evaluator input_ugp output_ugp circuit prefix_combination all_combinations [max_combinations]")
-        print("USAGE::example: python3 evaluator.py input_ugp.txt output_ugp.txt circuits/c17.in c17_comb.txt True\n\n")
+        print("USAGE:: python3 evaluator input_ugp output_ugp circuit prefix_combination all_combinations [max_combinations] output_readable output_fitness")
+        print("USAGE::example: python3 evaluator.py input_ugp.txt output_ugp.txt circuits/c17.in c17_comb.txt True output_readable.txt output_fitness.txt\n\n")
         sys.exit()
 
     file_ugp_input = sys.argv[1]
     file_ugp_output = sys.argv[2]
     file_circuit = sys.argv[3]
     file_prefix_combination = sys.argv[4]
+    file_output_evaluator_readable = sys.argv[7]
+    file_output_evaluator_fitness = sys.argv[8]
+
 
     if sys.argv[5].lower() == 'true':
         all_combinations = True
@@ -171,11 +174,11 @@ def main():
 
     ## At most evaluate 1 thousands of combinations
     max_combinations = 1000
-    if len(sys.argv) >= 7:
+    if len(sys.argv) >= 9:
         max_combinations = int(sys.argv[6])
 
     if all_combinations == False:
-        if len(sys.argv) < 7:
+        if len(sys.argv) < 9:
             print("ERROR:: number of arguments is incorrect")
             print("USAGE:: python3 evaluator input_ugp output_ugp circuit prefix_combination all_combinations [max_combinations]")
             print("USAGE::example: python3 evaluator.py input_ugp.txt output_ugp.txt circuits/c17.in c17_comb.txt False 100\n\n")
@@ -272,9 +275,9 @@ def main():
                 new_gate_length = get_new_gate_length(ugp_input, base_circuit_input_length)
 
                 ## CALCULATE FITNESS
-                first_fitness = get_safe_reverse(exp_mean_hds)
+                third_fitness = get_safe_reverse(exp_mean_hds)
                 second_fitness = get_safe_reverse(exp_mean_new_probs_cutted)
-                third_fitness = get_safe_reverse(new_gate_length)
+                first_fitness = get_safe_reverse(new_gate_length)
 
                 ## SOME STATS & DEBUG
                 # print("INFO:: HD mean: " + str(mean_hds)+ "\n")
@@ -293,6 +296,15 @@ def main():
                             str(number_rare_signals) + " NN_RS:" + str(number_new_rare_signals) + " LEN:" +
                             str(new_gate_length) + " NI:" + str(base_circuit_input_length))
                 print(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness))
+
+                # Write a more readable fitness to an output file
+                with open(file_output_evaluator_readable, "w+") as f_out:
+                    f_out.write(str(mean_hds) + " " + str(mean_new_probs_cutted) + " " + str(number_new_rare_signals)
+                                + " " + str(new_gate_length) + " " + str(base_circuit_input_length))
+
+                ## Write the fitness to the output file
+                with open(file_output_evaluator_fitness, "w+") as f_out:
+                    f_out.write(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness))
 
                 ## Write the fitness to the output file
                 with open(file_ugp_output, "w") as f_out:

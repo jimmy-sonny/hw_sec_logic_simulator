@@ -70,7 +70,7 @@
     <cacheSize value="100"/>
     <concurrentEvaluations value="1" />
     <removeTempFiles value="true" />
-    <evaluatorPathName value="python3 ../../__simulator/evaluator.py ../../__simulator/input_ugp_c17.txt output_ugp.txt ../../__simulator/circuits/c17.in ../../__simulator/circuits/prefix_c17.txt False 10 " />
+    <evaluatorPathName value="python3 ../../__simulator/evaluator.py ../../__simulator/input_ugp_c17.txt output_ugp.txt ../../__simulator/circuits/c17.in ../../__simulator/circuits/prefix_c17.txt False 10 output_readable.txt output_fitness.txt " />
     <evaluatorInputPathName value="../../__simulator/input_ugp_c17.txt" />
     <evaluatorOutputPathName value="output_ugp.txt" />
   </evaluation>
