@@ -298,13 +298,13 @@ def main():
                 print(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness))
 
                 # Write a more readable fitness to an output file
-                with open(file_output_evaluator_readable, "w+") as f_out:
+                with open(file_output_evaluator_readable, "a") as f_out:
                     f_out.write(str(mean_hds) + " " + str(mean_new_probs_cutted) + " " + str(number_new_rare_signals)
-                                + " " + str(new_gate_length) + " " + str(base_circuit_input_length))
+                                + " " + str(new_gate_length) + " " + str(base_circuit_input_length) + "\n")
 
                 ## Write the fitness to the output file
-                with open(file_output_evaluator_fitness, "w+") as f_out:
-                    f_out.write(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness))
+                with open(file_output_evaluator_fitness, "a") as f_out:
+                    f_out.write(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness) + "\n")
 
                 ## Write the fitness to the output file
                 with open(file_ugp_output, "w") as f_out:
