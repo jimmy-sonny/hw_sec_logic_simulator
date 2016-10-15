@@ -32,11 +32,11 @@ __circuits_and_parsers: contains the circuits and the utility script for the for
 —-To run the experiments:—-
 
 1) Go in the __upg_files folder and select the circuit you want to test
-2) Run: ugp3 > output_ugp3.txt
+2) Run: ugp3 > circuit.txt
 3) Run the finalizer script (from __utility folder) to get the plots [Note: plotter.py must be in the same folder of finaliser.sh]
-./finalizer.sh output_ugp3.txt
-3.2) python3 plotter2.py output_evaluator_fitness.txt plot1.png plot2.png
-3.3) python3 plotter3.py output_evaluator_readable.txt plot3.png plot4.png plot5.png
+./finalizer.sh circuit.txt
+3.2) python3 plotter2.py output_fitness.txt plot1.png plot2.png
+3.3) python3 plotter3.py output_readable.txt plot3.png plot4.png plot5.png
 4) mkdir PF; mv PF* ./PF; tar -zcvf PF.tar.gz PF
 
 
