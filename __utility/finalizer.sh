@@ -22,4 +22,4 @@ echo "CALL PLOTTER 2"
 python3 plotter2.py data.txt output_fitness.txt plot1_t.png plot2_t.png
 
 echo "CALL PLOTTER 3"
-python3 plotter3.py output_fitness.txt plot3.png plot4.png plot5.png
+python3 plotter3.py output_readable.txt plot3.png plot4.png plot5.png

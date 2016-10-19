@@ -23,7 +23,10 @@ from circuit import Circuit # Combinational logic simulation
 
 
 def get_new_gate_length(ugp_input, circuit_length):
-    new_gate_length = sum(np.clip(np.array(list(map(int, ugp_input))), 0, 1))
+    new_gate_length = 0
+    for i in list(map(int, ugp_input)):
+        if i == 1 or i == 2:
+            new_gate_length += 1
     return new_gate_length
 
 

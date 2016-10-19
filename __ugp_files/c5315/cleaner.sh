@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm *.txt
+rm *.png
 rm debug.log
 rm individualsToEvaluate.txt
 rm input_ugp*

@@ -42,7 +42,7 @@ class Circuit(object):
 
         for i in range(len(array)):
             # print("array[i]: "+ array[i])
-            if int(array[i]) != 0:
+            if int(array[i]) == 1 or int(array[i]) == 2:
 
                 # This is the maximum gate id, increment and use it to assign a new id
                 gate_number = self.__find_available_gate_number(i)

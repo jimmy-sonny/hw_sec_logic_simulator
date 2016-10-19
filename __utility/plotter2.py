@@ -26,7 +26,7 @@ try:
     plt.xlabel("Length")
     plt.ylabel("HD")
 
-    plt.plot(length_t, hd_t, 'rs', length, hd, 'bs')
+    plt.plot(length_t, hd_t, 'rs', length, hd, 'b.')
     plt.savefig(sys.argv[3])
     # plt.show()
 
@@ -35,7 +35,7 @@ try:
     plt.xlabel("Length")
     plt.ylabel("Rare Signals")
 
-    plt.plot(length_t, sr_t, 'rs', length, sr, 'bs')
+    plt.plot(length_t, sr_t, 'rs', length, sr, 'b.')
     plt.savefig(sys.argv[4])
     # plt.show()
 

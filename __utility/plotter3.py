@@ -23,7 +23,7 @@ try:
     plt.xlabel("Length")
     plt.ylabel("Avg HD")
 
-    plt.plot(length, hda, 'rs')
+    plt.plot(length, hda, 'g.')
     plt.savefig(sys.argv[2])
 
     plt.clf()
@@ -31,7 +31,7 @@ try:
     plt.xlabel("Length")
     plt.ylabel("Avg Signal Probability")
 
-    plt.plot(length, sa, 'rs')
+    plt.plot(length, sa, 'r.')
     plt.savefig(sys.argv[3])
 
     plt.clf()
@@ -39,7 +39,7 @@ try:
     plt.xlabel("Length")
     plt.ylabel("Number of Rare Signal")
 
-    plt.plot(length, rs, 'rs')
+    plt.plot(length, rs, 'r.')
     plt.savefig(sys.argv[4])
 
     sys.exit(0)
