@@ -23,21 +23,32 @@ __utility: contains utility script to create input and evaluation strings
 __ugp_files: contains all the files needed to run ugp. In each folder there is a specific configuration for the circuit
 __simulator: it is the circuit evaluator written in python
 __circuits_and_parsers: contains the circuits and the utility script for the format conversion of the circuit
-
+__exp: where the results of the experiments are stored
 
 
 
 {} INSTRUCTIONS {}
 
-—-To run the experiments:—-
+—-To run all the experiments —-
+1) go in the root folder of the project (hw_sec_logic_simulator)
+2) run:: ./_all_tests.sh
+[Note: the configuration with all the range_of_integers parameters for each circuit is located in cons.csv file. Please, refer to prob_calculator.xlsx for possible values.]
+
+
+—-To run a single experiment —-
+1) go in the root folder of the project (hw_sec_logic_simulator)
+2) run:: ./_single_test.sh circuit range_of_integers experiment_number
+example:: ./_single_test.sh c499 20 1
+[Note: range of integers affects the configuration of uGP: it is a way to configure the length of the new key to test]
+
+
+—-To run the experiments: low level way [legacy] [not recommended] —-
 
 1) Go in the __upg_files folder and select the circuit you want to test
-2) Run: ugp3 > circuit.txt
-3) Run the finalizer script (from __utility folder) to get the plots [Note: plotter.py must be in the same folder of finaliser.sh]
-./finalizer.sh circuit.txt
-3.2) python3 plotter2.py output_fitness.txt plot1.png plot2.png
-3.3) python3 plotter3.py output_readable.txt plot3.png plot4.png plot5.png
-4) mkdir PF; mv PF* ./PF; tar -zcvf PF.tar.gz PF
+2) Run:: ugp3 > circuit.txt
+3) Run the finalizer script (from __utility folder) to get the plots:: ./finalizer.sh circuit.txt
+[Note: plotter.py must be in the same folder of finaliser.sh]
+
 
 
 —-If you simply want to run the evaluator:—-
