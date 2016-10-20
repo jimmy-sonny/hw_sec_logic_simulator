@@ -30,8 +30,8 @@ else
     fi
 fi
 
-exp_number=$((0))
-exec_time=250
+exp_number=0
+exec_time=86400
 conf=$(($conf-1))
 while read circuit configs
 do
@@ -45,11 +45,6 @@ do
         exp_number=$(($exp_number+1))
     done
 done < conf.txt
-
-# wait for all the pids to finish:
-#  TODO:
-# pack all the results!
-#  TODO:
 
 # Delete previous files
 rm conf.txt
