@@ -20,8 +20,8 @@ try:
     length = [1/(float(i)) for i in getColumn(sys.argv[1], 2, " ")]
 
 
-    plt.xlabel("Length")
-    plt.ylabel("HD")
+    plt.xlabel("Key length")
+    plt.ylabel("Exp HD")
 
     plt.plot(length, hd, 'b.')
     plt.savefig(sys.argv[2])
@@ -29,8 +29,8 @@ try:
 
     plt.clf()
 
-    plt.xlabel("Length")
-    plt.ylabel("Rare Signals")
+    plt.xlabel("Key length")
+    plt.ylabel("Exp AVG rare signals prob")
 
     plt.plot(length, sr, 'b.')
     plt.savefig(sys.argv[3])

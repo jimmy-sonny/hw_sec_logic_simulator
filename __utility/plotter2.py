@@ -23,8 +23,8 @@ try:
     sr_t = [np.absolute(np.log(float(i))) for i in getColumn(sys.argv[2], 1, " ")]
     length_t = [1/(float(i)) for i in getColumn(sys.argv[2], 2, " ")]
 
-    plt.xlabel("Length")
-    plt.ylabel("HD")
+    plt.xlabel("Key length")
+    plt.ylabel("ExpAVG HD")
 
     plt.plot(length_t, hd_t, 'g.', length, hd, 'b.')
     plt.savefig(sys.argv[3])
@@ -32,8 +32,8 @@ try:
 
     plt.clf()
 
-    plt.xlabel("Length")
-    plt.ylabel("Rare Signals")
+    plt.xlabel("Key length")
+    plt.ylabel("ExpAVG signals probability")
 
     plt.plot(length_t, sr_t, 'r.', length, sr, 'b.')
     plt.savefig(sys.argv[4])

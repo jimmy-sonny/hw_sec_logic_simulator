@@ -30,16 +30,16 @@ else
     fi
 fi
 
-exp_number=1
+exp_number=$((0))
 exec_time=250
+conf=$(($conf-1))
 while read circuit configs
 do
     echo "INFO:: circuit:" $circuit
     for conf in $configs
     do
         echo "INFO:: conf:" $conf
-
-        ./_single_test.sh $circuit $(($conf-1)) $exp_number $exec_time &
+        ./_single_test.sh $circuit $conf $exp_number $exec_time &
         pid=`echo $!`
         echo "created process with PID: " $pid
         exp_number=$(($exp_number+1))

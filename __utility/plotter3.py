@@ -20,24 +20,24 @@ try:
     rs = getColumn(sys.argv[1], 2, " ")
     length = getColumn(sys.argv[1], 3, " ")
 
-    plt.xlabel("Length")
-    plt.ylabel("Avg HD")
+    plt.xlabel("Key length")
+    plt.ylabel("AVG HD")
 
     plt.plot(length, hda, 'g.')
     plt.savefig(sys.argv[2])
 
     plt.clf()
 
-    plt.xlabel("Length")
-    plt.ylabel("Avg Signal Probability")
+    plt.xlabel("Key length")
+    plt.ylabel("AVG signal probability")
 
     plt.plot(length, sa, 'r.')
     plt.savefig(sys.argv[3])
 
     plt.clf()
 
-    plt.xlabel("Length")
-    plt.ylabel("Number of Rare Signal")
+    plt.xlabel("Key length")
+    plt.ylabel("Number of rare signals (prob=0.20)")
 
     plt.plot(length, rs, 'r.')
     plt.savefig(sys.argv[4])

@@ -34,10 +34,10 @@ try:
 #    ax.scatter(hda, sa, length, c='b', marker='.')
     ax.scatter(hda, rs, length, c='b', marker='.')
 
-    ax.set_xlabel('Avg HD')
-    ax.set_ylabel('Number of Rare Signal')
-#    ax.set_ylabel('Avg Signal Probability')
-    ax.set_zlabel('Key Length')
+    ax.set_xlabel('AVG HD')
+    ax.set_ylabel('Number of rare signal (prob=0.20)')
+#    ax.set_ylabel('AVG signals probability')
+    ax.set_zlabel('key length')
 
     plt.savefig(sys.argv[2])
     sys.exit(0)
