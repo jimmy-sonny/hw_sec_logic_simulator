@@ -20,12 +20,13 @@ int main(){
     
     double hd_prob;
     double sign_prob;
-    int nsr;
+    int nsr_20;
     int nik;
     int nio;
+    int nsr_01;
     
-    while (fscanf(fpin, "%lf %lf %d %d %d", &hd_prob, &sign_prob, &nsr, &nik, &nio) != EOF) {
-        fprintf(fpout, "%f %f %d %d\n", fabs(0.5-hd_prob), fabs(0.5-sign_prob), nsr, nik);
+    while (fscanf(fpin, "%lf %lf %d %d %d %d", &hd_prob, &sign_prob, &nsr_20, &nik, &nio, &nsr_01) != EOF) {
+        fprintf(fpout, "%f %f %d %d %d\n", fabs(0.5-hd_prob), fabs(0.5-sign_prob), nsr_20, nik, nsr_01);
     }
     
     printf("INFO:: conversion finished\n");
