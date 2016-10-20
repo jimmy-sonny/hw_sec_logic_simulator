@@ -27,6 +27,19 @@ then
     exit
 fi
 
+# Check if the __exp/collector folder exists
+if [ ! -d "__exp/collector" ]
+then
+    mkdir __exp/collector
+    echo "INFO:: __exp/collector folder created"
+else
+    #check if a folder is empty
+    if [ -n "$(ls -A __exp/collector)" ]
+    then
+        echo "ERROR:: __exp/collector folder is not empty"
+        exit
+    fi
+fi
 
 ### Create a new folder where to do the experiments
 mkdir __exp/__exp_$3
@@ -56,7 +69,15 @@ cp __utility/_sources/print_best.c __exp/__exp_$3/
 
 #Call the finalizer script in the folder
 echo "%% CALL the finalizer" $$
-(cd __exp/__exp_$3/; ./finalizer.sh $1.txt)
+(cd __exp/__exp_$3/; ./finalizer.sh $1.txt;)
+
+# Copy all the stuff in the collector folder
+(cd __exp/__exp_$3/;
+cp ./temps/best_hd.txt ../collector/$1_$3_best_hd.txt;
+cp ./temps/best_01.txt ../collector/$1_$3_best_01.txt;
+cp ./temps/best_20.txt ../collector/$1_$3_best_20.txt;
+cp ./temps/best_sig_prob.txt ../collector/$1_$3_best_sig_prob.txt;)
+
 
 # remove all the stuff
 echo "%% REMOVING some stuff" $$
