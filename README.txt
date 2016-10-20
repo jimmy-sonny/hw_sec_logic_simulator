@@ -37,8 +37,8 @@ __exp: where the results of the experiments are stored
 
 —-To run a single experiment —-
 1) go in the root folder of the project (hw_sec_logic_simulator)
-2) run:: ./_single_test.sh circuit range_of_integers experiment_number
-example:: ./_single_test.sh c499 20 1
+2) run:: ./_single_test.sh circuit range_of_integers experiment_number seconds
+example:: ./_single_test.sh c499 20 1 10000
 [Note: range of integers affects the configuration of uGP: it is a way to configure the length of the new key to test]
 
 

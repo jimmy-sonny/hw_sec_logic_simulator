@@ -30,10 +30,10 @@ def get_new_gate_length(ugp_input, circuit_length):
     return new_gate_length
 
 
-def get_number_rare_signals(probabilities):
+def get_number_rare_signals(probabilities, threshold):
     number_rare_signals = 0
     for i in probabilities:
-        if float(i) < 0.01 or float(i) > 0.99:
+        if float(i) < threshold or float(i) > (1-threshold):
             number_rare_signals+=1
     return number_rare_signals
 
@@ -262,7 +262,8 @@ def main():
 
                 ## Evaluate the signal prob on BASE CIRCUIT
                 base_probs = evaluate_signal_probabilities(base_circuit)
-                number_rare_signals = get_number_rare_signals(base_probs)
+                number_old_rare_signals_20 = get_number_rare_signals(base_probs, 0.20)
+                number_old_rare_signals_01 = get_number_rare_signals(base_probs, 0.01)
                 exp_mean_base_probs = get_exp_mean(base_probs)
 
                 ## Evaluate the signal probabilities of NEW CIRCUIT
@@ -271,7 +272,8 @@ def main():
                 # new_probs_cutted = new_probs[:-number_new_gates]
                 new_probs_cutted = new_probs[:]
                 exp_mean_new_probs_cutted = get_exp_mean(new_probs_cutted)
-                number_new_rare_signals = get_number_rare_signals(new_probs_cutted)
+                number_new_rare_signals_20 = get_number_rare_signals(new_probs_cutted, 0.20)
+                number_new_rare_signals_01 = get_number_rare_signals(new_probs_cutted, 0.01)
                 mean_new_probs_cutted = get_mean(new_probs_cutted)
 
                 ## New gates evaluation
@@ -295,15 +297,17 @@ def main():
                 # print("INFO:: second_fitness: " + str(second_fitness) + "\n")
                 # print("INFO:: third_fitness: " + str(third_fitness) + "\n")
 
-                print("AVG_HD:" + str(mean_hds) + " AVG_SIG:" + str(mean_new_probs_cutted) + " N_RS:" +
-                            str(number_rare_signals) + " NN_RS:" + str(number_new_rare_signals) + " LEN:" +
-                            str(new_gate_length) + " NI:" + str(base_circuit_input_length))
+                print("AVG_HD:" + str(mean_hds) + " AVG_SIG:" + str(mean_new_probs_cutted) + " N_RS_20:" +
+                            str(number_old_rare_signals_20) + " NN_RS_20:" + str(number_new_rare_signals_20) + " LEN:" +
+                      str(new_gate_length) + " NI:" + str(base_circuit_input_length) + " N_RS_01:" +
+                      str(number_old_rare_signals_01) + " NN_RS_01:" + str(number_new_rare_signals_01))
+                      
                 print(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness))
 
                 # Write a more readable fitness to an output file
                 with open(file_output_evaluator_readable, "a") as f_out:
-                    f_out.write(str(mean_hds) + " " + str(mean_new_probs_cutted) + " " + str(number_new_rare_signals)
-                                + " " + str(new_gate_length) + " " + str(base_circuit_input_length) + "\n")
+                    f_out.write(str(mean_hds) + " " + str(mean_new_probs_cutted) + " " + str(number_new_rare_signals_20)
+                                + " " + str(new_gate_length) + " " + str(base_circuit_input_length) + " " + str(number_new_rare_signals_01) + "\n")
 
                 ## Write the fitness to the output file
                 with open(file_output_evaluator_fitness, "a") as f_out:

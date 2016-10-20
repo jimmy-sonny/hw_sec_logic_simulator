@@ -5,8 +5,8 @@
 #!/bin/bash
 
 # Check input parameter
-if [ "$#" -ne 3 ]; then
-    echo "usage ./inner_script.sh circuit configuration experiment_number"
+if [ "$#" -ne 4 ]; then
+    echo "usage ./inner_script.sh circuit configuration experiment_number execution_time"
     exit
 fi
 
@@ -35,6 +35,7 @@ cp __ugp_files/$1/* __exp/__exp_$3/
 ### Update uGP the configuration file
 echo "%% UPDATE the config file" $$
 cat __exp/__exp_$3/hwsec.constraints.xml.temp.xml  | sed "s/#MAXCOMB#/$2/g"> __exp/__exp_$3/hwsec.constraints.xml
+cat __exp/__exp_$3/hwsec.population.settings.xml.temp.xml  | sed "s/#MAXTIME#/$4/g"> __exp/__exp_$3/hwsec.population.settings.xml
 
 # Run uGP and save the output to a file
 echo "%% RUN uGP" $$
@@ -46,6 +47,12 @@ cp __utility/finalizer.sh __exp/__exp_$3/
 cp __utility/plotter.py __exp/__exp_$3/
 cp __utility/plotter2.py __exp/__exp_$3/
 cp __utility/plotter3.py __exp/__exp_$3/
+cp __utility/plotter5.py __exp/__exp_$3/
+cp __utility/_sources/converter.c __exp/__exp_$3/
+cp __utility/_sources/print_best.c __exp/__exp_$3/
+
+# Compile c files and delete the sources
+(cd __exp/__exp_$3/; gcc converter.c -o converter; gcc print_best.c -o print_best; rm converter.c print_best.c)
 
 #Call the finalizer script in the folder
 echo "%% CALL the finalizer" $$
@@ -53,11 +60,7 @@ echo "%% CALL the finalizer" $$
 
 # remove all the stuff
 echo "%% REMOVING some stuff" $$
-rm __exp/__exp_$3/finalizer.sh
-rm __exp/__exp_$3/plotter.py
-rm __exp/__exp_$3/plotter2.py
-rm __exp/__exp_$3/plotter3.py
-rm __exp/__exp_$3/hwsec.constraints.xml
+rm -rf __exp/__exp_$3/utility
 
 echo "%% FINISHED" $$
 exit
