@@ -24,7 +24,7 @@ else:
 max_number = int(sys.argv[3])
 file_output = sys.argv[4]
 
-print("\nDEBUG:: length:{0} random_state:{1} max_number:{2} file_output:{3}\n\n".format(length, random_state, max_number, file_output))
+# print("\nDEBUG:: length:{0} random_state:{1} max_number:{2} file_output:{3}\n\n".format(length, random_state, max_number, file_output))
 
 with open(file_output, 'w+') as f:
 
@@ -33,7 +33,7 @@ with open(file_output, 'w+') as f:
         if step == length:
             if random_state == False or (random_state == True and random.randint(0, 1) == 1):
                 counter = counter + 1
-                print(array)
+                # print(array)
                 f.write(str(array) + "\n")
                 if (counter >= max_number):
                     return True
@@ -52,4 +52,4 @@ with open(file_output, 'w+') as f:
     array = []
     counter = 0
     recursive(0, array)
-    print("\n\nDEBUG:: generated {0} strings of bits\n".format(counter))
+    # print("\n\nDEBUG:: generated {0} strings of bits\n".format(counter))

@@ -301,7 +301,7 @@ def main():
                             str(number_old_rare_signals_20) + " NN_RS_20:" + str(number_new_rare_signals_20) + " LEN:" +
                       str(new_gate_length) + " NI:" + str(base_circuit_input_length) + " N_RS_01:" +
                       str(number_old_rare_signals_01) + " NN_RS_01:" + str(number_new_rare_signals_01))
-                      
+
                 print(str(first_fitness) + " " + str(second_fitness) + " " + str(third_fitness))
 
                 # Write a more readable fitness to an output file

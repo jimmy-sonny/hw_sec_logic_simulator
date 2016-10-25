@@ -44,7 +44,7 @@ outputs_number=`echo $outputs | awk '{printf "%s\n", NF};'`
 echo "outputs_number: $outputs_number"
 
 # Findout where is the circuit description
-start_parsing=`cat $FILE | grep -E 'and|or|nand|nor|xor|xnor' -n | cut -f1 -d ":" | sort -n | sed -n 1,1p`
+start_parsing=`cat $FILE | grep -E 'not|and|or|nand|nor|xor|xnor' -n | cut -f1 -d ":" | sort -n | sed -n 1,1p`
 end_of_parsing=`cat $FILE | grep -n endmodule | cut -f1 -d":"`
 #echo "Start parsing at line: " $start_parsing
 #echo "End of parsing at line: " $end_of_parsing
