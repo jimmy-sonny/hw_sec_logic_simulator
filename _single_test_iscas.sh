@@ -28,6 +28,20 @@ then
 fi
 
 # Check if the __exp/collector folder exists
+if [ ! -d "__exp/__exp_$3" ]
+then
+    mkdir __exp/collector
+    echo "INFO:: __exp/__exp_$3 folder created"
+else
+    #check if a folder is empty
+    if [ -n "$(ls -A __exp/__exp_$3)" ]
+    then
+        echo "ERROR:: __exp/__exp_$3 folder is not empty"
+        exit
+    fi
+fi
+
+# Check if the __exp/collector folder exists
 if [ ! -d "__exp/collector" ]
 then
     mkdir __exp/collector
@@ -43,8 +57,9 @@ fi
 
 # Define two dictionary with the configuration:
 
-input_number=`python3 -c "circuit_inputs={'c17':5, 'c432':36, 'c499':41, 'c880':60, 'c1355':41 'c1908':51 'c2670':18 'c3540':37 'c5315':178 'c6288':32}; print(circuit_inputs[\"$1\"])"`
-number_combination=`python3 -c "circuit_inputs={'c17':10, 'c432':10, 'c499':10, 'c880':10, 'c1355':5 'c1908':5 'c2670':5 'c3540':5 'c5315':5 'c6288':5}; print(circuit_inputs[\"$1\"])"`
+input_number=`python3 -c "circuit_inputs={'c17':5, 'c432':36, 'c499':41, 'c880':60, 'c1355':41, 'c1908':51, 'c2670':18, 'c3540':37, 'c5315':178, 'c6288':32}; print(circuit_inputs[\"$1\"])"`
+port_number=`python3 -c "circuit_inputs={'c17':6, 'c432':160, 'c499':202, 'c880':383, 'c1355':546, 'c1908':880, 'c2670':1193, 'c3540':1669, 'c5315':2307, 'c6288':2416}; print(circuit_inputs[\"$1\"])"`
+number_combination=`python3 -c "circuit_inputs={'c17':10, 'c432':10, 'c499':10, 'c880':10, 'c1355':5, 'c1908':5, 'c2670':5, 'c3540':5, 'c5315':5, 'c6288':5}; print(circuit_inputs[\"$1\"])"`
 
 ### Create a new folder where to do the experiments
 mkdir __exp/__exp_$3
@@ -52,10 +67,10 @@ cp __ugp_files/* __exp/__exp_$3/
 
 ### Update uGP the configuration file
 echo "%% UPDATE the config file" $$
-echo "#MAXCOMB#" $2 " #PORT_NUMBER#" $input_number " #MAXTIME#" $4 " #INPUT_UGP#" $1\_input_ugp.txt " #CIRCUIT#" iscas85\/$1.in " #PREFIX#" iscas85\/$1_prefix.txt " #NUMBER_COMBINATIONS#" $number_combination
+echo "#MAXCOMB#" $2 " #PORT_NUMBER#" $port_number " #MAXTIME#" $4 " #INPUT_UGP#" $1\_input_ugp.txt " #CIRCUIT#" iscas85\/$1.in " #PREFIX#" iscas85\/$1_prefix.txt " #NUMBER_COMBINATIONS#" $number_combination
 
-cat __exp/__exp_$3/hwsec.constraints.xml.temp.xml  | sed "s/#MAXCOMB#/$2/g" | sed "s/#PORT_NUMBER#/$input_number/g" > __exp/__exp_$3/hwsec.constraints.xml
-cat __exp/__exp_$3/hwsec.population.settings.xml.temp.xml  | sed "s/#MAXTIME#/$4/g" | sed "s/#INPUT_UGP#/$1\_input\_ugp.txt/g" | sed "s/#CIRCUIT#/iscas85\/$1.in/g" | sed "s/#PREFIX#/iscas85\/$1_prefix.txt/g" |  | sed "s/#NUMBER_COMBINATIONS#/$number_combination/g" > __exp/__exp_$3/hwsec.population.settings.xml
+cat __exp/__exp_$3/hwsec.constraints.xml.temp.xml  | sed "s/#MAXCOMB#/$2/g" | sed "s/#PORTNUMBER#/$port_number/g" > __exp/__exp_$3/hwsec.constraints.xml
+cat __exp/__exp_$3/hwsec.population.settings.xml.temp.xml  | sed "s/#MAXTIME#/$4/g" | sed "s/#INPUT_UGP#/$1\_input\_ugp.txt/g" | sed "s/#CIRCUIT#/iscas85\/$1.in/g" | sed "s/#PREFIX#/iscas85\/$1_prefix.txt/g" | sed "s/#NUMBER_COMBINATIONS#/$number_combination/g" > __exp/__exp_$3/hwsec.population.settings.xml
 
 # Run uGP and save the output to a file
 echo "%% RUN uGP" $$
