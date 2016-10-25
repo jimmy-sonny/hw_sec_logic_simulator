@@ -145,6 +145,8 @@ class Gate(object):
 
         # If the input is a list, then take the first element.
         if type(input) is list:
+            if (len(input) > 1 ):
+                raise Exception('not_prob input > 1 not supported')
             final_input = input[0]
 
         # Otherwise, take the input as is.
@@ -171,13 +173,12 @@ class Gate(object):
         Keyword arguments:
         input -- Input value
         """
-        # if (len(input) > 1 ):
-        #     raise Exception('not_prob input > 1 not supported')
-
         final_input = None
 
         # If the input is a list, then take the first element.
         if type(input) is list:
+            if (len(input) > 1 ):
+                raise Exception('not_prob input > 1 not supported')
             final_input = input[0]
 
         # Otherwise, take the input as is.
@@ -190,7 +191,7 @@ class Gate(object):
 
         # The probabilty of logic not is the same of the input
         else:
-            return final_input;
+            return 1-final_input;
 
     def __and(self, input):
         """Perform a logic AND on all the input values.
