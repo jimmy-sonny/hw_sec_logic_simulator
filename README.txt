@@ -13,7 +13,7 @@ Some files (were specified) are under Copyright of Byron Phung.
 — uGP [http://ugp3.sourceforge.net]
 - python3
 - numpy for python3
-
+- matplotlib
 
 
 
@@ -30,39 +30,35 @@ __exp: where the results of the experiments are stored
 {} INSTRUCTIONS {}
 
 —-To run all the experiments —-
+
 1) go in the root folder of the project (hw_sec_logic_simulator)
 2) run:: ./_all_tests.sh
-[Note: the configuration with all the range_of_integers parameters for each circuit is located in cons.csv file. Please, refer to prob_calculator.xlsx for possible values.]
+[Note: the configuration with all the range_of_integers parameters for each circuit to test, is located in cons.csv file. Please, refer to prob_calculator.xlsx for possible values.]
 
 
 —-To run a single experiment —-
+
 1) go in the root folder of the project (hw_sec_logic_simulator)
-2) run:: ./_single_test.sh circuit range_of_integers experiment_number seconds
-example:: ./_single_test.sh c499 20 1 10000
-[Note: range of integers affects the configuration of uGP: it is a way to configure the length of the new key to test]
+2) run:: ./_all_tests_iscas.sh circuit range_of_integers experiment_number seconds
+example:: ./_single_test_iscas.sh c499 20 1 10000
+[note: the second script modifies several variables inside uGP configuration files]
 
 
-—-To run the experiments: low level way [legacy] [not recommended] —-
+—-To run the experiments: low level way [legacy] [not working anymore.. it is required to change some parameters in the config files] —-
 
 1) Go in the __upg_files folder and select the circuit you want to test
 2) Run:: ugp3 > circuit.txt
 3) Run the finalizer script (from __utility folder) to get the plots:: ./finalizer.sh circuit.txt
-[Note: plotter.py must be in the same folder of finaliser.sh]
+[Note: plotter*.py must be in the same folder of finalizer.sh]
 
 
 
 —-If you simply want to run the evaluator:—-
 
 1) Go in the __simulator folder
-2) run one of the following commands (or meaningful variations):
+2) run one of the following commands (with necessary variations):
+python3 evaluator.py ./iscas85/c7552_ugp_input.txt output_ugp.txt ./iscas85/c7552.in ./iscas85/c7552_prefix.txt False 1 output_readable.txt output_fitness.txt
 
-python3 evaluator.py ./circuits/input_ugp_c17.txt output_ugp.txt ./circuits/c17.in ./circuits/prefix_c17.txt True output_readable.txt output_fitness.txt
-python3 evaluator.py ./circuits/input_ugp_c499.txt output_ugp.txt ./circuits/c499.in ./circuits/prefix_c499.txt False 10 output_readable.txt output_fitness.txt
-python3 evaluator.py ./circuits/input_ugp_c880.txt output_ugp.txt ./circuits/c880.in ./circuits/prefix_c880.txt False 10 output_readable.txt output_fitness.txt
-python3 evaluator.py ./circuits/input_ugp_c1355.txt output_ugp.txt ./circuits/c1355.in ./circuits/prefix_c1355.txt False 10 output_readable.txt output_fitness.txt
-python3 evaluator.py ./circuits/input_ugp_c2670.txt output_ugp.txt ./circuits/c2670.in ./circuits/prefix_c2670.txt False 1 output_readable.txt output_fitness.txt
-python3 evaluator.py ./circuits/input_ugp_c5315.txt output_ugp.txt ./circuits/c5315.in ./circuits/prefix_c5315.txt False 1 output_readable.txt output_fitness.txt
-python3 evaluator.py ./circuits/input_ugp_c6288.txt output_ugp.txt ./circuits/c6288.in ./circuits/prefix_c6288.txt False 1 output_readable.txt output_fitness.txt
 
 Note:
 The file passed as third parameters contains all the input combinations that will be tested on the circuit.

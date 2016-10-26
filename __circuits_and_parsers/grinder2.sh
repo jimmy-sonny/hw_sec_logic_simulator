@@ -30,7 +30,7 @@ circuit=`cat temp.txt`;
 index=0;
 for input in `cat temp0.txt`;
 do
-  circuit=`echo $circuit | sed "s/$input/I$index/g"`;
+  circuit=`echo $circuit | sed "s/\b$input\b/I$index/g"`;
   index=$(($index+1));
 done;
 
