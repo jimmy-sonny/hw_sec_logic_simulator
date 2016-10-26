@@ -28,6 +28,8 @@ class Gate(object):
         """
         if self.type == "NOT":
             return self.__not(input)
+        elif self.type == "BUF":
+            return self.__buf(input)
         elif self.type == "OR":
             return self.__or(input)
         elif self.type == "AND":
@@ -56,6 +58,10 @@ class Gate(object):
         """
         if self.type == "NOT":
             probab = self.__not_probability(input)
+            # print("DEBUG:: probability: " + str(probab))
+            return probab
+        elif self.type == "BUF":
+            probab = self.__buf_probability(input)
             # print("DEBUG:: probability: " + str(probab))
             return probab
         elif self.type == "OR":
@@ -192,6 +198,58 @@ class Gate(object):
         # The probabilty of logic not is the same of the input
         else:
             return 1-final_input;
+
+    def __buf(self, input):
+        """Perform a logic BUF on the input value.
+
+        Keyword arguments:
+        input -- Input value
+        """
+        final_input = None
+
+        # If the input is a list, then take the first element.
+        if type(input) is list:
+            if (len(input) > 1 ):
+                raise Exception('not_prob input > 1 not supported')
+            final_input = input[0]
+
+        # Otherwise, take the input as is.
+        else:
+            final_input = input
+
+        # If the input was still not assigned, then display an error.
+        if final_input is None:
+            print("ERROR:: Invalid input to NOT gate (input = \"" + input + "\"")
+
+        # Otherwise, evaluate the NOT logic.
+        else:
+            return final_input
+
+    def __buf_probability(self, input):
+        """Calculate the probability of a logic BUF on the input value.
+
+        Keyword arguments:
+        input -- Input value
+        """
+        final_input = None
+
+        # If the input is a list, then take the first element.
+        if type(input) is list:
+            if (len(input) > 1 ):
+                raise Exception('not_prob input > 1 not supported')
+            final_input = input[0]
+
+        # Otherwise, take the input as is.
+        else:
+            final_input = input
+
+        # If the input was still not assigned, then display an error.
+        if final_input is None:
+            print("ERROR:: Invalid input to NOT gate (input = \"" + input + "\"")
+
+        # The probabilty of logic not is the same of the input
+        else:
+            return final_input
 
     def __and(self, input):
         """Perform a logic AND on all the input values.
