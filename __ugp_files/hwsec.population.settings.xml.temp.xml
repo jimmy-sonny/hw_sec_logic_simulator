@@ -63,7 +63,7 @@
   <maximumEvaluations value="1000000"/>
 
   <!-- parents selector parameters -->
-  <selection type="tournamentWithFitnessHole" tau="1" tauMin="1" tauMax="1" fitnessHole="0" />
+  <selection type="tournamentWithFitnessHole" tau="2" tauMin="2" tauMax="2" fitnessHole="0" />
 
   <!-- evaluator parameters -->
   <evaluation>
